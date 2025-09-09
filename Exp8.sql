@@ -27,6 +27,10 @@ insert into Customer values(02,'Ronald',652783012,'Rosegarden','Portugal','03790
 insert into Customer values(03,'Draco',7193026480,'Rocksvilla','New York','230946','USA');
 insert into Customer values(04,'Luna',4590128743,'Edeanhome','Salt Lake City','037546','USA');
 insert into Customer values(05,'Suzuki',0118123903,'Futari','Tokyo','71234','Japan');
+insert into Customer values(06,'Momose',0112784918,'Shirozaki','Tokyo','71234','Japan');
+insert into Customer values(07,'Zentisu',0120173920,'Agatsuma','Tokyo','71234','Japan');
+insert into Customer values(08,'Tanjiro',0112947103,'Kamado','Tokyo','71234','Japan');
+
 select * from Customer;
 
 insert into Employees values(100,'Jitraphol','Jimmy',to_date('21-08-1994','dd-mm-yyyy'));
@@ -54,3 +58,32 @@ select * from Orders order by OrderDate asc;
 select * from Employees where extract(year from BirthDate)> 1980 order by BirthDate desc;
 
 select * from Orders where CustomerID in (select CustomerID from Customer where Country='USA');
+
+select c.customerid, c.customername(
+select count (*) from orders o where o.customerid= c.customerid) as total_orders from 
+Customer c order by c.customerid;
+
+select c.CustomerID, c.CustomerName, count(o.OrderID) as TotalOrders
+from Customer c
+join Orders o on c.CustomerID = o.CustomerID
+group by c.CustomerID, c.CustomerName
+order by c.CustomerID;
+
+
+select City, count(CustomerID) as TotalCustomers from Customer group by City;
+
+select c.CustomerID, c.CustomerName, count(o.OrderID) as TotalOrders
+from Customer c
+join Orders o on c.CustomerID = o.CustomerID
+group by c.CustomerID, c.CustomerName
+having count(o.OrderID) > 2;
+
+
+select City, count(CustomerID) as TotalCustomers
+from Customer
+group by  City
+having count(CustomerID) > 3;
+
+update Orders set customerid='01' where OrderID=1005;
+select * from orders;
+
